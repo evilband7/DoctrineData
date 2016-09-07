@@ -2,7 +2,7 @@
   "name" : "evilband7/mk-doctrine-spring-data",
   "description" : "Bring SpringData features into PHP",
   "require" : {
-    "php" : ">=5.4",
+    "php" : "~7.0",
     "doctrine/orm" : "*",
     "doctrine/common" : "*",
     "zendframework/zend-stdlib" : "*",
@@ -10,18 +10,15 @@
     "myclabs/php-enum" : "*",
     "psr/log" : "~1"
   },
-  "repositories" : [ {
-    "type" : "composer",
-    "url" : "https://repo.fury.io/evilband7/"
-  } ],
   "require-dev" : {
     "phpunit/phpunit" : "*",
-    "monolog/monolog" : "*"
+    "monolog/monolog" : "*",
+    "jms/serializer"  : "~1.2"
   },
   "license" : "Apache License Version 2.0",
   "autoload" : {
-    "psr-0" : {
-      "MkDoctrineSpringData\\" : "src/"
+    "psr-4" : {
+      "MkDoctrineSpringData\\" : "src/MkDoctrineSpringData"
     }
   },
   "type" : "library",
