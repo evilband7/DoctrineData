@@ -8,7 +8,7 @@ class DomainDriver extends AnnotationDriver
     
     public function __construct($reader)
     {
-        parent::__construct($reader, __DIR__.'/../');     
+        parent::__construct($reader, __DIR__ . '/Domain/');
     }
 
     
