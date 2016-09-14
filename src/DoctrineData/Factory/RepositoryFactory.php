@@ -3,8 +3,6 @@ namespace DoctrineData\Factory;
 
 use Doctrine\ORM\Repository\RepositoryFactory as DoctrineRepositoryFactoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use DoctrineData\Repository\DoctrineDataRepository;
-use DoctrineData\Context\ContextInterface;
 
 class RepositoryFactory implements DoctrineRepositoryFactoryInterface
 {
@@ -18,7 +16,7 @@ class RepositoryFactory implements DoctrineRepositoryFactoryInterface
         $this->context = $context;
     }
     
-    public function getRepository(\Doctrine\ORM\EntityManagerInterface $entityManager, $entityName)
+    public function getRepository(EntityManagerInterface $entityManager, $entityName)
     {
         return $this->context->getRepository($entityManager, $entityName);
     }

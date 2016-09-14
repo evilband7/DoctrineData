@@ -9,6 +9,16 @@ class Repository
 {
     
     private $entityName;
+
+    /**
+     * @return mixed
+     */
+    public function getEntityName()
+    {
+        return $this->entityName;
+    }
+
+
     
 }
 
