@@ -3,7 +3,7 @@ namespace DoctrineData\Factory;
 
 use Doctrine\ORM\Repository\RepositoryFactory as DoctrineRepositoryFactoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use DoctrineData\Repository\DoctrineDataRepositoryImpl;
+use DoctrineData\Repository\DoctrineDataRepository;
 use DoctrineData\Context\ContextInterface;
 
 class RepositoryFactory implements DoctrineRepositoryFactoryInterface

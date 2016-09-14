@@ -2,7 +2,7 @@
 namespace DoctrineData\Pagination;
 use JMS\Serializer\Annotation as Serializer;
 
-class PageImpl extends Chunk implements PageInterface
+class Page extends Chunk implements PageInterface
 {
     /**
      * @var int

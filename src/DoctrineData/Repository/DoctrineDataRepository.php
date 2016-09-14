@@ -16,7 +16,7 @@ use PhpCommonUtil\Util\Assert;
  * @author Map
  *
  */
-class DoctrineDataRepositoryImpl implements  DoctrineDataRepositoryInterface
+class DoctrineDataRepository implements  DoctrineDataRepositoryInterface
 {
 
     use ConstructorSupport;

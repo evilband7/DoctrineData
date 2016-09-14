@@ -2,7 +2,7 @@
 namespace DoctrineData\Domain\Driver;
 
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
-class DomainDriver extends AnnotationDriver
+class DomainDriver extends com
 {
     
     public function __construct($reader, $paths = null)

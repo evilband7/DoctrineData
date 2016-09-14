@@ -12,7 +12,7 @@ namespace DoctrineData\Repository\Support;
 use Doctrine\ORM\QueryBuilder;
 use DoctrineData\Pagination\PageableInterface;
 use Doctrine\ORM\Query;
-use DoctrineData\Pagination\PageImpl;
+use DoctrineData\Pagination\Page;
 use DoctrineData\Pagination\PageInterface;
 use DoctrineData\Pagination\Sort;
 use DoctrineData\Pagination\Sorting\NullHandling;
@@ -124,7 +124,7 @@ trait PaginationSupport
         $qb->setFirstResult($pageable->getPageSize() * $pageable->getPageNumber());
 
         $content = $qb->getQuery()->getResult($hydrationMode);
-        $page = new PageImpl($content, $pageable, $total);
+        $page = new Page($content, $pageable, $total);
         return $page;
     }
 
