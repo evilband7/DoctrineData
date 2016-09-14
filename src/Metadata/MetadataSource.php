@@ -10,13 +10,14 @@ namespace DoctrineData\Metadata;
 
 
 use Doctrine\Common\Cache\Cache;
+use DoctrineData\Metadata\Repository\RepositoryMetadataExtractor;
 use DoctrineData\Options\ConfigOptions;
 use PhpCommonUtil\Util\Assert;
 use Psr\Log\LoggerInterface;
+use Zend\Code\Scanner\FileScanner;
 
 class MetadataSource
 {
-
     /**
      * @var Metadata
      */
@@ -58,7 +59,7 @@ class MetadataSource
         return $this->metadata;
     }
 
-    private function loadMetadata() : Metadata
+    public function loadMetadata() : Metadata
     {
         $cacheKey   = $this->cofigOptions->getMetadataCacheKey();
         $cache      = $this->cache;
@@ -73,6 +74,7 @@ class MetadataSource
         }
 
         $dirs = $this->cofigOptions->getDirectoryToScan();
+        $extractor = new RepositoryMetadataExtractor($this->logger);
         foreach ($dirs as $dir){
             Assert::isTrue(is_string($dir), sprintf('Invalid directory "%s" ', $dir));
             Assert::isTrue(file_exists($dir), sprintf('Invalid directory "%s" ', $dir));
@@ -81,6 +83,11 @@ class MetadataSource
             foreach ($files as $file){
                 if ($this->endswith('.php', $file)){
                     $file = $dir . '/' . $file;
+                    $scanner = new FileScanner($file);
+                    foreach ( $scanner->getClassNames() as $className){
+                        $clazz = new \ReflectionClass($className);
+                        $extractor->extract($clazz);
+                    }
 
                 }
             }

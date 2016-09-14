@@ -3,11 +3,12 @@
   "description" : "Bring SpringData features into PHP",
   "require" : {
     "php" : "~7.0",
-    "doctrine/orm" : "*",
-    "doctrine/common" : "*",
-    "zendframework/zend-stdlib" : "*",
+    "doctrine/orm" : "~2.5",
+    "doctrine/common" : "~2.5",
+    "zendframework/zend-stdlib" : "~3.0 || ~2.7",
+    "zendframework/zend-code" : "~3.0 || ~2.7",
     "evilband7/php-common-util" : "*",
-    "myclabs/php-enum" : "*",
+    "myclabs/php-enum" : "~1.0",
     "psr/log" : "~1"
   },
   "require-dev" : {
@@ -19,6 +20,11 @@
   "autoload" : {
     "psr-4" : {
       "DoctrineData\\" : "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "DoctrineDataTest\\DoctrineData\\": "test/src/"
     }
   },
   "type" : "library",

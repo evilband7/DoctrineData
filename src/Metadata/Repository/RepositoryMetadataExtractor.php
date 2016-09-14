@@ -9,6 +9,8 @@
 namespace DoctrineData\Metadata\Repository;
 
 
+use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\Reader;
 use Psr\Log\LoggerInterface;
 
 class RepositoryMetadataExtractor
@@ -19,7 +21,24 @@ class RepositoryMetadataExtractor
      */
     private $logger;
 
-    private function extract(\ReflectionClass $class){
+    /**
+     * @var Reader
+     */
+    private $reader;
+
+    /**
+     * RepositoryMetadataExtractor constructor.
+     * @param LoggerInterface $logger
+     */
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+        $this->reader = new AnnotationReader();
+    }
+
+
+    public function extract(\ReflectionClass $class){
+
 
     }
 

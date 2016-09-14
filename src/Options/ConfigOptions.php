@@ -24,6 +24,14 @@ class ConfigOptions extends  AbstractOptions
      */
     private $metadataCacheKey;
 
+    private $interfaceSuffix = 'Interface';
+
+    private $implementationSuffix = 'Impl' ;
+
+    private $proxyNamespace = 'DoctrineDataProxy\\';
+
+    private $proxyLocation = null;
+
     /**
      * @return mixed
      */
@@ -56,8 +64,68 @@ class ConfigOptions extends  AbstractOptions
         $this->metadataCacheKey = $metadataCacheKey;
     }
 
+    /**
+     * @return string
+     */
+    public function getInterfaceSuffix(): string
+    {
+        return $this->interfaceSuffix;
+    }
 
+    /**
+     * @param string $interfaceSuffix
+     */
+    public function setInterfaceSuffix(string $interfaceSuffix)
+    {
+        $this->interfaceSuffix = $interfaceSuffix;
+    }
 
+    /**
+     * @return string
+     */
+    public function getImplementationSuffix(): string
+    {
+        return $this->implementationSuffix;
+    }
 
+    /**
+     * @param string $implementationSuffix
+     */
+    public function setImplementationSuffix(string $implementationSuffix)
+    {
+        $this->implementationSuffix = $implementationSuffix;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProxyNamespace(): string
+    {
+        return $this->proxyNamespace;
+    }
+
+    /**
+     * @param string $proxyNamespace
+     */
+    public function setProxyNamespace(string $proxyNamespace)
+    {
+        $this->proxyNamespace = $proxyNamespace;
+    }
+
+    /**
+     * @return null
+     */
+    public function getProxyLocation()
+    {
+        return $this->proxyLocation;
+    }
+
+    /**
+     * @param null $proxyLocation
+     */
+    public function setProxyLocation($proxyLocation)
+    {
+        $this->proxyLocation = $proxyLocation;
+    }
 
 }
