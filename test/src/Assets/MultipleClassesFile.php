@@ -6,7 +6,7 @@
  * Time: 12:50 AM
  */
 
-namespace DoctrineDataTest\DoctrineData\TestAssets\src;
+namespace DoctrineDataTest\DoctrineData\Assets;
 
 
 class MultipleClassesFile

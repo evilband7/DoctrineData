@@ -25,7 +25,7 @@ abstract class BaseTestCase extends  TestCase
     public function setUp(){
         $logger = new Logger('test');
         $curDate = new \DateTime();
-        $logger->pushHandler(new StreamHandler(__DIR__ . '/../assets/log/' . $curDate->format('y-m-d') . '.log', Logger::DEBUG));
+        $logger->pushHandler(new StreamHandler(__DIR__ . '/../log/' . $curDate->format('y-m-d') . '.log', Logger::DEBUG));
         $this->logger = $logger;
     }
 
