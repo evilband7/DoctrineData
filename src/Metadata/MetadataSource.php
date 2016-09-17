@@ -9,12 +9,18 @@
 namespace DoctrineData\Metadata;
 
 
+use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Cache\Cache;
+use DoctrineData\Annotation\Repository;
 use DoctrineData\Metadata\Repository\RepositoryMetadataExtractor;
 use DoctrineData\Options\ConfigOptions;
+use DoctrineData\Repository\DoctrineDataRepositoryInterface;
 use PhpCommonUtil\Util\Assert;
+use PhpCommonUtil\Util\StringUtils;
+use PhpCommonUtil\Util\TypeUtils;
 use Psr\Log\LoggerInterface;
 use Zend\Code\Scanner\FileScanner;
+use Zend\Stdlib\ArrayUtils;
 
 class MetadataSource
 {
@@ -73,32 +79,55 @@ class MetadataSource
             }
         }
 
-        $dirs = $this->cofigOptions->getDirectoryToScan();
+        $metadata = new Metadata();
         $extractor = new RepositoryMetadataExtractor($this->logger);
+    }
+
+    public function findPhpClassesInTargetDirs(array $dirs = []) : array
+    {
+        $reader = $this->getAnnotationReader();
+        if(empty($dirs)){
+            $dirs = $this->cofigOptions->getDirectoryToScan();
+        }
+        $result = [];
         foreach ($dirs as $dir){
             Assert::isTrue(is_string($dir), sprintf('Invalid directory "%s" ', $dir));
             Assert::isTrue(file_exists($dir), sprintf('Invalid directory "%s" ', $dir));
             Assert::isTrue(is_dir($dir), sprintf('Invalid directory "%s" ', $dir));
             $files = scandir($dir);
             foreach ($files as $file){
-                if ($this->endswith('.php', $file)){
+                if ( StringUtils::endsWith($file, '.php')){
                     $file = $dir . '/' . $file;
                     $scanner = new FileScanner($file);
-                    foreach ( $scanner->getClassNames() as $className){
+                    ArrayUtils::merge($result, $scanner->getClassNames());
+                    foreach( $scanner->getClassNames() as $className ){
                         $clazz = new \ReflectionClass($className);
-                        $extractor->extract($clazz);
+                        if( $clazz->isInterface() && TypeUtils::isAssignable($clazz, DoctrineDataRepositoryInterface::class) ){
+                            /* @var $repository Repository */
+                            $repository = $reader->getClassAnnotation($clazz, Repository::class);
+                            if ( null != $this->$repository && StringUtils::hasLength($repository->getEntityName()) ){
+                                $result[] = $clazz;
+                            }
+                        }
                     }
-
+                }else if( is_dir($file) ){
+                    ArrayUtils::merge($result, $this->findPhpClassesInTargetDirs([$file]));
                 }
             }
         }
+        return $result;
     }
 
-    private function endswith($string, $test) {
-        $strlen = strlen($string);
-        $testlen = strlen($test);
-        if ($testlen > $strlen) return false;
-        return substr_compare($string, $test, $strlen - $testlen, $testlen) === 0;
+    /**
+     * @var AnnotationReader
+     */
+    private $_annotationReader = null;
+
+    private function getAnnotationReader(){
+        if (null == $this->_annotationReader ){
+            $this->_annotationReader = new AnnotationReader();
+        }
+        return $this->_annotationReader;
     }
 
 }

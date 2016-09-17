@@ -22,7 +22,7 @@ class ConfigOptions extends  AbstractOptions
     /**
      * @var string
      */
-    private $metadataCacheKey;
+    private $metadataCacheKey = 'DoctrineDataConfigCache';
 
     private $interfaceSuffix = 'Interface';
 
@@ -31,6 +31,8 @@ class ConfigOptions extends  AbstractOptions
     private $proxyNamespace = 'DoctrineDataProxy\\';
 
     private $proxyLocation = null;
+
+    private $isDebugModeEnabled = false;
 
     /**
      * @return mixed
@@ -127,5 +129,23 @@ class ConfigOptions extends  AbstractOptions
     {
         $this->proxyLocation = $proxyLocation;
     }
+
+    /**
+     * @return boolean
+     */
+    public function isIsDebugModeEnabled(): bool
+    {
+        return $this->isDebugModeEnabled;
+    }
+
+    /**
+     * @param boolean $isDebugModeEnabled
+     */
+    public function setIsDebugModeEnabled(bool $isDebugModeEnabled)
+    {
+        $this->isDebugModeEnabled = $isDebugModeEnabled;
+    }
+
+
 
 }
