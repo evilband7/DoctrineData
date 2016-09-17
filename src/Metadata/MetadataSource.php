@@ -85,9 +85,13 @@ class MetadataSource
 
     public function findPhpClassesInTargetDirs(array $dirs = []) : array
     {
+        $isDebugEnabled = $this->cofigOptions->isIsDebugModeEnabled();
         $reader = $this->getAnnotationReader();
         if(empty($dirs)){
             $dirs = $this->cofigOptions->getDirectoryToScan();
+        }
+        if( $isDebugEnabled ){
+            $this->logger->debug('DoctrineData is Scanning the following directories for repository: {dirs}',['dirs'=>$dirs]);
         }
         $result = [];
         foreach ($dirs as $dir){
@@ -95,6 +99,7 @@ class MetadataSource
             Assert::isTrue(file_exists($dir), sprintf('Invalid directory "%s" ', $dir));
             Assert::isTrue(is_dir($dir), sprintf('Invalid directory "%s" ', $dir));
             $files = scandir($dir);
+
             foreach ($files as $file){
                 if ( StringUtils::endsWith($file, '.php')){
                     $file = $dir . '/' . $file;
