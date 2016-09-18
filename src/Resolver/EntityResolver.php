@@ -23,8 +23,8 @@ interface EntityResolver
     /**
      * @param \ReflectionClass $repositoryReflection
      * @param $repositoryName
-     * @return bool
+     * @return bool true if able to resolve given repository
      */
-    function support(\ReflectionClass $repositoryReflection, $repositoryName) : bool ;
+    function support(\ReflectionClass $repositoryReflection) : bool ;
 
 }

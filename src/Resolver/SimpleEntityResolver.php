@@ -47,7 +47,7 @@ class SimpleEntityResolver implements  EntityResolver
         return sprintf('%s\\%s',$entityNamespace, $entityClassName);
     }
 
-    function support(\ReflectionClass $repositoryReflection, $repositoryName) : bool
+    function support(\ReflectionClass $repositoryReflection) : bool
     {
         return true;
     }
