@@ -7,8 +7,6 @@
  */
 
 namespace DoctrineDataTest\DoctrineData\Assets\Repository;
-
-
 use DoctrineData\Annotation\Repository;
 
 /**

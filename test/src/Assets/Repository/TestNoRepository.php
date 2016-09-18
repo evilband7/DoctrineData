@@ -8,8 +8,12 @@
 
 namespace DoctrineDataTest\DoctrineData\Assets\Repository;
 
+use DoctrineData\Annotation\NoRepositoryBean;
 use DoctrineData\Repository\DoctrineDataRepositoryInterface;
 
+/**
+ * @NoRepositoryBean()
+ */
 interface TestNoRepository extends DoctrineDataRepositoryInterface  , TestNoRepositoryCustom
 {
 

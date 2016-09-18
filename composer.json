@@ -9,7 +9,8 @@
     "zendframework/zend-code" : "~3.0 || ~2.7",
     "evilband7/php-common-util" : "*",
     "myclabs/php-enum" : "~1.0",
-    "psr/log" : "~1"
+    "psr/log" : "~1",
+    "indigophp/doctrine-annotation-autoload" : "*"
   },
   "require-dev" : {
     "phpunit/phpunit" : "*",

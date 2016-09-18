@@ -50,7 +50,7 @@ class BaseTestCase extends  TestCase
             'proxy_namespace' => 'DoctrineDataProxy\\',
             'is_debug_mode_enabled' => true,
             'directory_to_scan' => [
-                __DIR__ . '/Repository',
+                __DIR__ . '/Assets/Repository',
             ],
         ]);
         /*  ------------------------   */

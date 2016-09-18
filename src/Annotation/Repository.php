@@ -8,18 +8,8 @@ namespace DoctrineData\Annotation;
 class Repository
 {
     
-    private $entityName;
+    public $entityName;
 
-    /**
-     * @return mixed
-     */
-    public function getEntityName()
-    {
-        return $this->entityName;
-    }
-
-
-    
 }
 
 ?>

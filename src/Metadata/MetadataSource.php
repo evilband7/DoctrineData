@@ -8,10 +8,10 @@
 
 namespace DoctrineData\Metadata;
 
-
 use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Cache\Cache;
-use DoctrineData\Annotation\Repository;
+use DoctrineData\Annotation\NoRepositoryBean;
 use DoctrineData\Metadata\Repository\RepositoryMetadataExtractor;
 use DoctrineData\Options\ConfigOptions;
 use DoctrineData\Repository\DoctrineDataRepositoryInterface;
@@ -32,7 +32,7 @@ class MetadataSource
     /**
      * @var ConfigOptions
      */
-    private $cofigOptions;
+    private $configOptions;
 
     /**
      * @var Cache
@@ -46,18 +46,18 @@ class MetadataSource
 
     /**
      * MetadataSource constructor.
-     * @param ConfigOptions $cofigOptions
+     * @param ConfigOptions $configOptions
      * @param Cache $cache
      */
-    public function __construct(ConfigOptions $cofigOptions, Cache $cache, LoggerInterface $logger)
+    public function __construct(ConfigOptions $configOptions, Cache $cache, LoggerInterface $logger)
     {
-        $this->cofigOptions = $cofigOptions;
+        $this->configOptions = $configOptions;
         $this->cache = $cache;
         $this->logger = $logger;
     }
 
 
-    public function getMedatada()
+    public function getMetadata()
     {
         if ( null == $this->metadata ){
             $this->metadata = $this->loadMetadata();
@@ -67,10 +67,10 @@ class MetadataSource
 
     public function loadMetadata() : Metadata
     {
-        $cacheKey   = $this->cofigOptions->getMetadataCacheKey();
+        $cacheKey   = $this->configOptions->getMetadataCacheKey();
         $cache      = $this->cache;
 
-        if( $cache->contains($cacheKey)){
+        if ( $cache->contains($cacheKey)) {
             $metadata = $cache->fetch($cacheKey);
             if ( $metadata instanceof  Metadata ){
                 return $metadata;
@@ -85,16 +85,17 @@ class MetadataSource
 
     public function findPhpClassesInTargetDirs(array $dirs = []) : array
     {
-        $isDebugEnabled = $this->cofigOptions->isIsDebugModeEnabled();
+        $isDebugEnabled = $this->configOptions->isIsDebugModeEnabled();
         $reader = $this->getAnnotationReader();
         if(empty($dirs)){
-            $dirs = $this->cofigOptions->getDirectoryToScan();
+            $dirs = $this->configOptions->getDirectoryToScan();
         }
         if( $isDebugEnabled ){
-            $this->logger->debug('DoctrineData is Scanning the following directories for repository: {dirs}',['dirs'=>$dirs]);
+            $this->logger->debug('DoctrineData is Scanning the following directories for noRepository: {dirs}',['dirs'=>$dirs]);
         }
         $result = [];
         foreach ($dirs as $dir){
+            $this->logger->debug('Scanning directory "{dir}"', ['dir'=>$dir]);
             Assert::isTrue(is_string($dir), sprintf('Invalid directory "%s" ', $dir));
             Assert::isTrue(file_exists($dir), sprintf('Invalid directory "%s" ', $dir));
             Assert::isTrue(is_dir($dir), sprintf('Invalid directory "%s" ', $dir));
@@ -106,16 +107,18 @@ class MetadataSource
                     $scanner = new FileScanner($file);
                     ArrayUtils::merge($result, $scanner->getClassNames());
                     foreach( $scanner->getClassNames() as $className ){
+                        $this->logger->debug('Found class: ',['class'=>$className]);
                         $clazz = new \ReflectionClass($className);
                         if( $clazz->isInterface() && TypeUtils::isAssignable($clazz, DoctrineDataRepositoryInterface::class) ){
-                            /* @var $repository Repository */
-                            $repository = $reader->getClassAnnotation($clazz, Repository::class);
-                            if ( null != $this->$repository && StringUtils::hasLength($repository->getEntityName()) ){
+                            $noRepositoryBean = $reader->getClassAnnotation($clazz, NoRepositoryBean::class);
+                            $this->logger->debug('Found Repository "{class}" ', ['class'=>$className]);
+                            if ( null == $noRepositoryBean ){
                                 $result[] = $clazz;
+                                conitnue;
                             }
                         }
                     }
-                }else if( is_dir($file) ){
+                }else if( '.' != $file && '..' != $file && is_dir($file) ){
                     ArrayUtils::merge($result, $this->findPhpClassesInTargetDirs([$file]));
                 }
             }
