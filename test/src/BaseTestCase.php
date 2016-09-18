@@ -12,6 +12,7 @@ namespace DoctrineDataTest\DoctrineData;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\Cache;
 use DoctrineData\Options\ConfigOptions;
+use DoctrineData\Resolver\SimpleEntityResolver;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
@@ -52,6 +53,12 @@ class BaseTestCase extends  TestCase
             'directory_to_scan' => [
                 __DIR__ . '/Assets/Repository',
             ],
+            'entity_resolvers' => [
+                [
+                    'priority' => 1,
+                    'resolver' => new SimpleEntityResolver('Repository', 'Entity', 'Repository', '')
+                ]
+            ]
         ]);
         /*  ------------------------   */
         $this->cache = new ArrayCache();

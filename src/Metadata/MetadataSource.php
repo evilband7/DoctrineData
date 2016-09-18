@@ -16,6 +16,7 @@ use DoctrineData\Options\ConfigOptions;
 use DoctrineData\Repository\DoctrineDataRepositoryInterface;
 use PhpCommonUtil\Util\TypeUtils;
 use Psr\Log\LoggerInterface;
+use Zend\Code\Scanner\DerivedClassScanner;
 use Zend\Code\Scanner\DirectoryScanner;
 
 class MetadataSource
@@ -44,6 +45,7 @@ class MetadataSource
      * MetadataSource constructor.
      * @param ConfigOptions $configOptions
      * @param Cache $cache
+     * @param LoggerInterface $logger
      */
     public function __construct(ConfigOptions $configOptions, Cache $cache, LoggerInterface $logger)
     {
@@ -75,8 +77,18 @@ class MetadataSource
             }
         }
 
+        $reader = $this->getAnnotationReader();
+        $classes = $this->findPhpClassesInTargetDirs();
+        $extractor = new RepositoryMetadataExtractor($this->logger, $reader, $this->configOptions);
+        $repositoryMap = [];
+        $entityMap = [];
+        $allRepositoryMap = [];
+        $extractor->extractRepositoryMetadata($classes, $repositoryMap, $entityMap, $allRepositoryMap);
+
         $metadata = new Metadata();
-        $extractor = new RepositoryMetadataExtractor($this->logger);
+        $metadata->setEntityMap($entityMap);
+        $metadata->setRepositoryMap($repositoryMap);
+        return $metadata;
     }
 
     public function findPhpClassesInTargetDirs() : array
@@ -93,15 +105,17 @@ class MetadataSource
         $scanner = new DirectoryScanner($dirs);
         $this->logger->debug('Found classes: ',['classes'=>$scanner->getClasses()]);
 
-        foreach ($scanner->getClassNames() as $className ) {
-            $clazz = new \ReflectionClass($className);
-            $this->logger->debug('Is Assignable" ', ['Assignable'=>$clazz->isSubclassOf(DoctrineDataRepositoryInterface::class)]);
-            if( $clazz->isInterface() && TypeUtils::isAssignable($clazz, DoctrineDataRepositoryInterface::class) ){
-                $noRepositoryBean = $reader->getClassAnnotation($clazz, NoRepositoryBean::class);
+        foreach ($scanner->getClasses() as $class ) {
+            /* @var $class DerivedClassScanner  */
+            $classReflection = new \ReflectionClass($class->getName());
+            if( $class->isInterface() && TypeUtils::isAssignable($classReflection, DoctrineDataRepositoryInterface::class) ){
+                $noRepositoryBean = $reader->getClassAnnotation($classReflection, NoRepositoryBean::class);
                 if ( null == $noRepositoryBean ){
-                    $result[] = $clazz;
-                    $this->logger->debug('Found Repository "{class}" ', ['class'=>$clazz->getName()]);
-                    conitnue;
+                    $result[] = $class;
+                    if( $isDebugEnabled ){
+                        $this->logger->debug('Found Repository "{class}" ', ['class'=>$class->getName()]);
+                    }
+                    continue;
                 }
             }
         }

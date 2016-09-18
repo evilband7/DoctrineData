@@ -6,7 +6,7 @@
     "doctrine/orm" : "~2.5",
     "doctrine/common" : "~2.5",
     "zendframework/zend-stdlib" : "~3.0 || ~2.7",
-    "zendframework/zend-code" : "~3.0 || ~2.7",
+    "zendframework/zend-code" : "~3.0",
     "evilband7/php-common-util" : "*",
     "myclabs/php-enum" : "~1.0",
     "psr/log" : "~1",
@@ -15,6 +15,7 @@
   "require-dev" : {
     "phpunit/phpunit" : "*",
     "monolog/monolog" : "*",
+    "zendframework/zend-debug" : "~3.0 || ~2.5",
     "jms/serializer"  : "~1.2"
   },
   "license" : "Apache License Version 2.0",

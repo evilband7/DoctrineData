@@ -8,7 +8,6 @@
 
 namespace DoctrineData\Metadata\Repository;
 
-
 class RepositoryMetadata
 {
 
@@ -32,9 +31,14 @@ class RepositoryMetadata
     private $type;
 
     /**
-     * @var array
+     * @var RepositoryMetadata[]
      */
     private $parents;
+
+    /**
+     * @var MethodMetadata[]
+     */
+    private $methods = [];
 
     /**
      * @return string
@@ -85,7 +89,7 @@ class RepositoryMetadata
     }
 
     /**
-     * @return array
+     * @return RepositoryMetadata[]
      */
     public function getParents(): array
     {
@@ -93,11 +97,27 @@ class RepositoryMetadata
     }
 
     /**
-     * @param array $parents
+     * @param RepositoryMetadata[] $parents
      */
     public function setParents(array $parents)
     {
         $this->parents = $parents;
+    }
+
+    /**
+     * @return MethodMetadata[]
+     */
+    public function getMethods(): array
+    {
+        return $this->methods;
+    }
+
+    /**
+     * @param MethodMetadata[] $methods
+     */
+    public function setMethods(array $methods)
+    {
+        $this->methods = $methods;
     }
 
 }

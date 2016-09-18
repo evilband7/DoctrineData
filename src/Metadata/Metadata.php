@@ -9,10 +9,49 @@
 namespace DoctrineData\Metadata;
 
 
+use DoctrineData\Metadata\Repository\RepositoryMetadata;
+
 class Metadata
 {
+    /**
+     * @var RepositoryMetadata[]
+     */
+    private $entityMap = [];
 
-    private $entityToRepositoryMap;
-    private $repositoryToEntityMap;
+    /**
+     * @var RepositoryMetadata[]
+     */
+    private $repositoryMap = [];
 
+    /**
+     * @return Repository\RepositoryMetadata[]
+     */
+    public function getEntityMap(): array
+    {
+        return $this->entityMap;
+    }
+
+    /**
+     * @param Repository\RepositoryMetadata[] $entityMap
+     */
+    public function setEntityMap(array $entityMap)
+    {
+        $this->entityMap = $entityMap;
+    }
+
+    /**
+     * @return Repository\RepositoryMetadata[]
+     */
+    public function getRepositoryMap(): array
+    {
+        return $this->repositoryMap;
+    }
+
+    /**
+     * @param Repository\RepositoryMetadata[] $repositoryMap
+     */
+    public function setRepositoryMap(array $repositoryMap)
+    {
+        $this->repositoryMap = $repositoryMap;
+    }
 }

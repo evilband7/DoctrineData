@@ -9,6 +9,7 @@
 namespace DoctrineData\Options;
 
 
+use DoctrineData\Resolver\EntityResolver;
 use Zend\Stdlib\AbstractOptions;
 
 class ConfigOptions extends  AbstractOptions
@@ -24,26 +25,46 @@ class ConfigOptions extends  AbstractOptions
      */
     private $metadataCacheKey = 'DoctrineDataConfigCache';
 
+    /**
+     * @var string
+     */
     private $interfaceSuffix = 'Interface';
 
+    /**
+     * @var string
+     */
     private $implementationSuffix = 'Impl' ;
 
+    /**
+     * @var string
+     */
     private $proxyNamespace = 'DoctrineDataProxy\\';
 
+    /**
+     * @var string
+     */
     private $proxyLocation = null;
 
+    /**
+     * @var bool
+     */
     private $isDebugModeEnabled = false;
 
     /**
-     * @return mixed
+     * @var ResolverOptions[]
      */
-    public function getDirectoryToScan() : array
+    private $entityResolvers = [];
+
+    /**
+     * @return array
+     */
+    public function getDirectoryToScan(): array
     {
         return $this->directoryToScan;
     }
 
     /**
-     * @param mixed $directoryToScan
+     * @param array $directoryToScan
      */
     public function setDirectoryToScan(array $directoryToScan)
     {
@@ -51,15 +72,15 @@ class ConfigOptions extends  AbstractOptions
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getMetadataCacheKey() : string
+    public function getMetadataCacheKey(): string
     {
         return $this->metadataCacheKey;
     }
 
     /**
-     * @param mixed $metadataCacheKey
+     * @param string $metadataCacheKey
      */
     public function setMetadataCacheKey(string $metadataCacheKey)
     {
@@ -115,17 +136,17 @@ class ConfigOptions extends  AbstractOptions
     }
 
     /**
-     * @return null
+     * @return string
      */
-    public function getProxyLocation()
+    public function getProxyLocation(): string
     {
         return $this->proxyLocation;
     }
 
     /**
-     * @param null $proxyLocation
+     * @param string $proxyLocation
      */
-    public function setProxyLocation($proxyLocation)
+    public function setProxyLocation(string $proxyLocation)
     {
         $this->proxyLocation = $proxyLocation;
     }
@@ -144,6 +165,30 @@ class ConfigOptions extends  AbstractOptions
     public function setIsDebugModeEnabled(bool $isDebugModeEnabled)
     {
         $this->isDebugModeEnabled = $isDebugModeEnabled;
+    }
+
+    /**
+     * @return ResolverOptions[]
+     */
+    public function getEntityResolvers(): array
+    {
+        return $this->entityResolvers;
+    }
+
+    /**
+     * @param ResolverOptions[]|array $entityResolvers
+     */
+    public function setEntityResolvers(array $entityResolvers)
+    {
+        $finalResolvers = [];
+        foreach ($entityResolvers as $resolver) {
+            if ( $resolver instanceof ResolverOptions ) {
+                $finalResolvers[] = $resolver;
+            }else{
+                $finalResolvers[] = new ResolverOptions($resolver);
+            }
+        }
+        $this->entityResolvers = $finalResolvers;
     }
 
 
