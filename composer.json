@@ -1,5 +1,5 @@
 {
-  "name" : "evilband7/mk-doctrine-spring-data",
+  "name" : "evilband7/doctrine-data",
   "description" : "Bring SpringData features into PHP",
   "require" : {
     "php" : "~7.0",
